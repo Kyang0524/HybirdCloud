@@ -1,0 +1,83 @@
+﻿
+@{
+    ViewBag.Title = "Register";
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<section class="shop_section layout_padding">
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Register
+            </h2>
+        </div>
+
+        <form method="post" action="~/Home/Register" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Username</label>
+                <input type="text" name="Username"class="form-control" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="Password" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword2" required>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email</label>
+                <input type="email" name="Email"class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+            </div>
+
+            <div class="mb-3">
+                <fieldset>
+                    <label class="form-label">Male</label>
+                    <input type="radio" name="Gender" value="Male" required>
+                    <label class="form-label">Female</label>
+                    <input type="radio" name="Gender" value="Female" required>
+                </fieldset>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Phone Number</label>
+                <input type="text" class="form-control" name="PhoneNumber" required>
+            </div>
+
+            <div class="mb-3">
+                <fieldset>
+                    <label class="form-label">Seller</label>
+                    <input type="radio" name="AccountType" value="Seller" required>
+                    <label class="form-label">Buyer</label>
+                    <input type="radio" name="AccountType" value="Buyer" required>
+                </fieldset>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Image</label>
+                <label><input type="file" id="inpfile" name="Image" style="display: none;" accept=".jpg,.png" required><img id="avat" class="avat" src="" alt="個人頭像" style="border: 2px green dashed; width: 200px; height: 200px; " ></label>
+            </div>
+
+            <label for="exampleInputPassword1" class="form-label">Captcha</label>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="Captcha" placeholder="" autocomplete="off" required>
+                <img src="~/Home/ValidateCode" onclick="this.src = this.src + '?'" width="80" height="30">
+            </div>
+            <button type="submit" class="btn btn-primary ">Register</button>
+        </form>
+        </div>
+    </section>
+<script>
+    var imgavat = $('#avat');
+    var inpfile = $('#inpfile');
+    inpfile.on('change', function () {
+        if (this.files[0]) {
+            var reader = new FileReader();
+
+            reader.readAsDataURL(this.files[0]);
+
+            reader.onloadend = function () {
+                imgavat.attr('src', reader.result);
+            };
+        }
+    });
+</script>

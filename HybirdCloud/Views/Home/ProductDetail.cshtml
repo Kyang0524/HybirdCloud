@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Product Detail";
+    List<ItemInfo> ItemInfo = ViewBag.ItemDetail;
+}
+
+<section class="shop_section layout_padding">
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Product Detail
+            </h2>
+        </div>
+
+        @foreach (ItemInfo item in ItemInfo)
+        {
+            <div class="box">
+                <center>
+                    <div class="img-box" style="width:200px;height:200px;">
+                        <img src='data:image;base64,@Convert.ToBase64String(item.ItemImage)' alt="個人頭像">
+                    </div>
+                </center>
+                <div class="row" style="font-size:20px;">
+                    <div class="col-sm-6"><strong>Item Name: </strong> <var>@item.ItemName</var></div>
+                    <div class="col-sm-6"><strong>Price: </strong> <var>$@item.ItemPrice</var></div>
+                    <div class="col-sm-6"><strong>Seller: </strong> <var>@item.ItemUploader</var></div>
+                </div>
+            </div>              
+            if (!Session["Account"].Equals(item.ItemUploader)) {
+            <button>Chat with sheller</button><button>Add to cart</button><form method="post" action="~/Home/Shop"><input value="@item.ItemName" name="ItemName" hidden /><input value="@item.ItemPrice" name="ItemPrice" hidden /><input value="@item.ItemUploader" name="Ownership" hidden /><input value="@item.ItemID" name="ItemID" hidden /><button type="submit">Buy</button></form>
+            } 
+        }
+
+
+    </div>
+</section>

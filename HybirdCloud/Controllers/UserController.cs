@@ -1,0 +1,175 @@
+﻿using HybirdCloud.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Data.Entity;
+using System.Diagnostics;
+
+namespace HybirdCloud.Controllers
+{
+    public class UserController : Controller
+    {
+        // GET: User
+        public ActionResult Info()
+        {
+            if (Session["Account"] == null)
+            {
+                TempData["msg"] = "Please Login first!";
+                return RedirectToAction("Login", "Home");
+            }
+            var db = new HybridCloudEntities();
+            UserInfo user= db.UserInfo.Find(Session["Account"]);
+            ViewBag.user = user;
+
+            Session["Account"] = user.Username;
+            Session["Email"] = user.Email;
+            Session["PhoneNumber"] = user.PhoneNumber;
+            Session["AccountType"] = user.AccountType;
+            Session["Gender"] = user.Gender;
+            Session["Wallet"] = user.Wallet;
+
+            Session["Image"] = Convert.ToBase64String(user.Image);
+            return View();
+        }
+        public ActionResult EditInfo()
+        {
+            if (Session["Account"] == null)
+            {
+                TempData["msg"] = "Please Login first!";
+                return RedirectToAction("Login","Home");
+            }
+            return View();
+        }
+        [HttpPost]
+        public ActionResult EditInfo(EditUser userModel)
+        {
+            var db = new HybridCloudEntities();
+            UserInfo user = db.UserInfo.Find(Session["Account"]);
+            user.Email = userModel.Email;
+            user.PhoneNumber = userModel.PhoneNumber;
+
+            if (userModel.Image != null)
+            {
+                byte[] fileBytes;
+                using (var stream = userModel.Image.InputStream)
+                {
+                    fileBytes = new byte[stream.Length];
+                    stream.Read(fileBytes, 0, (int)stream.Length);
+                }
+                user.Image = fileBytes;
+            }
+
+            if (ModelState.IsValid)
+            {
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+                TempData["msg"] = "Change Info Successful";
+                UserInfo users = db.UserInfo.Find(Session["Account"]);
+                Session["Account"] = users.Username;
+                Session["Email"] = users.Email;
+                Session["PhoneNumber"] = users.PhoneNumber;
+                Session["AccountType"] = users.AccountType;
+                Session["Gender"] = users.Gender;
+                Session["Wallet"] = users.Wallet;
+                Session["Image"] = Convert.ToBase64String(users.Image);
+                return View("Info");
+            }
+            return View(userModel);
+            
+        }
+
+        public ActionResult Cart()
+        {
+            return View();
+        }
+
+        public ActionResult ChatRoom()
+        {
+            return View();
+        }
+
+        public ActionResult Upload()
+        {
+            if (Session["Account"] == null)
+            {
+                TempData["msg"] = "Please Login first!";
+                return RedirectToAction("Login", "Home");
+            }
+            if (Session["AccountType"].Equals("Buyer"))
+            {
+                TempData["msg"] = "You are not Seller account";
+                return RedirectToAction("Index","Home");
+            }
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Upload(ProductModel productModel)
+        {
+            var db = new HybridCloudEntities();
+            var itemInfo = new ItemInfo();
+
+            Random generator = new Random();
+
+            itemInfo.ItemID = generator.Next(0, 1000000).ToString("D6");
+            itemInfo.ItemName = productModel.ItemName;
+            itemInfo.ItemPrice = productModel.ItemPrice;
+            itemInfo.ItemUploader = Session["Account"].ToString();
+            itemInfo.Description = productModel.Description;
+            itemInfo.Categories = productModel.Categories;
+            itemInfo.SalesMethod = productModel.SalesMethod;
+            itemInfo.ItemUploadTime = DateTime.UtcNow;
+
+            if (productModel.ItemImage != null) {
+                byte[] fileBytes;
+
+                using (var stream = productModel.ItemImage.InputStream)
+                {
+                    fileBytes = new byte[stream.Length];
+                    stream.Read(fileBytes, 0, (int)stream.Length);
+                }
+
+                itemInfo.ItemImage = fileBytes;
+            }
+
+            db.ItemInfo.Add(itemInfo);
+            db.SaveChanges();
+            TempData["msg"] = "Upload product successful.";
+            return View();
+        }
+
+        public ActionResult Myproduct()
+        {
+            if (Session["Account"] != null)
+            {
+                var db = new HybridCloudEntities();
+                string username = Session["Account"].ToString();
+                if (Session["AccountType"].Equals("Buyer"))
+                {
+
+                    List<Shopping> shops = db.Shopping.Where(S => S.Buyer.Equals(username)).ToList();
+                    List<ItemInfo> items = new List<ItemInfo>();
+                    foreach (Shopping shop in shops)
+                    {
+                        ItemInfo item = db.ItemInfo.Find(shop.ItemID);
+                        items.Add(item);
+                    }
+                    ViewBag.Myproduct = items;
+                    return View();
+                }
+                else
+                {
+                    List<ItemInfo> items = db.ItemInfo.Where(I => I.ItemUploader.Equals(username)).ToList();
+                    ViewBag.Myproduct = items;
+                    return View();
+                }
+
+            }
+
+            TempData["msg"] = "Please Login first!";
+
+            return RedirectToAction("Login", "Home");
+        }
+    }
+}

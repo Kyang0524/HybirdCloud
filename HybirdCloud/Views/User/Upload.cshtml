@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "Upload";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<section class="shop_section layout_padding">
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Upload
+            </h2>
+        </div>
+
+
+        <div class="box">
+            <form method="post" action="~/User/Upload" enctype="multipart/form-data">
+                <center>
+                    <div class="img-box" style="width:200px;height:200px;">
+                        <label><input type="file" id="inpfile" name="ItemImage" style="display: none;" accept=".jpg,.png" required><img id="avat" class="avat" src='' alt="商品圖片"></label><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAgElEQVR4nO2VwQnAIAxF3zg92B2K+5/aQ0coZAmLkIOIFawKLeSDIEn4iclXwdCIMGg9whKE1hadwAZcBZ8AHth7ZuDV7pQwJY82NOZ1AgFW9S16kpKtS0WSVOuyvYySqSRV1yr/ZgKZ2SKZPWQ/W6aHEkjlosUYe+z4z39gIMcNGjoWXoEhKL0AAAAASUVORK5CYII="onclick="removeImg()">
+
+                    </div>
+                </center>
+                <div class="row " style="font-size:20px;">
+                    <div class="col-sm-12 form-group"><strong>Product Name: </strong> <input type="text" name="ItemName" required></div>
+                    <div class="col-sm-12 form-group"><strong>Price: $</strong> <input type="number" name="ItemPrice" required /></div>
+                    <div class="col-sm-12 form-group"><strong>Description: </strong> <input type="text" name="Description" required /></div>
+                    <div class="col-sm-12 form-group"><strong>Categories: </strong> <select name="Categories" required><option value="Dog">Dog</option><option value="BugCat">BugCat</option><option value="Shark">Shark</option></select></div>
+                    <div class="col-sm-12 form-group"><strong>Sales method: </strong> <select name="SalesMethod" required><option value="Normal">Normal</option><option value="Auction">Auction</option></select></div>
+
+                </div>
+                <center><button class="btn btn-default" type="submit">Submit</button></center>
+            </form>
+        </div>
+
+
+
+    </div>
+</section>
+<script>
+    var imgavat = $('#avat');
+    var inpfile = $('#inpfile');
+    inpfile.on('change', function () {
+        if (this.files[0]) {
+            var reader = new FileReader();
+
+            reader.readAsDataURL(this.files[0]);
+
+            reader.onloadend = function () {
+                imgavat.attr('src', reader.result);
+            };
+        }
+    });
+    function removeImg() {
+        imgavat.attr('src', '');
+        inpfile.val('');
+    }
+
+</script>
+

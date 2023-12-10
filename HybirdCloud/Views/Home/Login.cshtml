@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+<section class="shop_section layout_padding">
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Login
+            </h2>
+        </div>
+
+        <form method="post" action="~/Home/Login">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Username</label>
+                <input type="text" class="form-control" name="Username" id="Username" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <input type="password" class="form-control" name="Password" id="Password" required>
+            </div>
+            <label for="exampleInputPassword1" class="form-label">Captcha</label>
+            <div class="input-group mb-3">
+
+                <input type="text" name="ValidateCode" class="form-control" placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2" autocomplete="off" required>
+                <img src="~/Home/ValidateCode" onclick="this.src = this.src + '?'" width="80" height="30">
+            </div>
+            <button type="submit" class="btn btn-primary ">Login</button>
+        </form>
+        </div>
+    </section>

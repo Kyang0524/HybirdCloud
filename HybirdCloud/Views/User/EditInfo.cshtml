@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "EditInfo";
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<section class="shop_section layout_padding">
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Edit Info
+            </h2>
+        </div>
+
+
+        <div class="box">
+            <form method="post" action="~/User/EditInfo" enctype="multipart/form-data">
+            <center>
+                <div class="img-box" style="width:200px;height:200px;">
+                    <label><input type="file" id="inpfile" name="Image" style="display: none;" accept=".jpg,.png"><img id="avat" class="avat" src='data:image;base64,@Session["Image"]' alt="個人頭像"></label>
+                </div>
+            </center>
+            <div class="row" style="font-size:20px;">
+                <div class="col-sm-6"><strong>UserName: </strong> <var>@Session["Account"]</var></div>
+                <div class="col-sm-6"><strong>Email: </strong> <input type="email" name="Email" value="@Session["Email"]"/></div>
+                <div class="col-sm-6"><strong>Contact Number: </strong> <input type="text" name="PhoneNumber"value="@Session["PhoneNumber"]"/></div>
+                <div class="col-sm-6"><strong>Gender: </strong> <var>@Session["Gender"]</var></div>
+                <div class="col-sm-6"><strong>Account Type: </strong> <var>@Session["AccountType"]</var></div>
+                <div class="col-sm-6"><strong>Wallet: </strong> <var>$@Session["Wallet"]</var></div>
+            </div>
+            <center><button class="btn btn-default" type="submit">Submit</button> <button class="btn btn-default" onclick="history.back()">Go Back</button></center>
+                </form>
+        </div>
+
+
+
+    </div>
+</section>
+<script>
+    var imgavat = $('#avat');
+    var inpfile = $('#inpfile');
+    inpfile.on('change', function () {
+        if (this.files[0]) {
+            var reader = new FileReader();
+
+            reader.readAsDataURL(this.files[0]);
+
+            reader.onloadend = function () {
+                imgavat.attr('src', reader.result);
+            };
+        }
+    });
+    </script>

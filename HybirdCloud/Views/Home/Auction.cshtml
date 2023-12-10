@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewBag.Title = "Auction";
+    List<ItemInfo> ItemInfo = ViewBag.Auction;
+}
+
+<section class="shop_section layout_padding">
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Auction
+            </h2>
+        </div>
+        @{
+            if (ItemInfo.Count == 0)
+            {
+                <h1>No production can bid</h1>
+            }
+            else
+            {
+                foreach (ItemInfo item in ItemInfo)
+                {
+                    <div id="div_@item.ItemName@item.ItemID">
+                    <center>
+                        <h1>Auction End :@item.ItemUploadTime.ToString("yyyy-MM-dd HH:mm")</h1>
+                        <p id="count_@item.ItemName@item.ItemID"></p>
+                    </center>
+                    <div class="box">
+                        <center>
+                            <div class="img-box" style="width:200px;height:200px;">
+                                <img src='data:image;base64,@Convert.ToBase64String(item.ItemImage)' alt="個人頭像">
+                            </div>
+                        </center>
+                        <div class="row" style="font-size:20px;">
+                            <div class="col-sm-6"><strong>Item Name: </strong> <var>@item.ItemName</var></div>
+                            <div class="col-sm-6"><strong>Price: </strong> <var id="price_@item.ItemID">@item.ItemPrice</var></div>
+                            <div class="col-sm-6"><strong>Seller: </strong> <var>@item.ItemUploader</var></div>
+                            <div class="col-sm-6"><strong>Bidder: </strong> <var id="Bider_@item.ItemID"></var></div>
+                        </div>
+                    </div>
+                    @if (!Session["Account"].Equals(item.ItemUploader))
+                    {
+                        <center><button type="submit" id="Bid_@item.ItemID@item.ItemUploader" onclick="Auction(@item.ItemID)">Bid(+100)</button></center>
+
+                    }
+
+                    <script>
+                        var countDownDate_@item.ItemID@item.ItemName = new Date("@item.ItemUploadTime.ToString("MM dd, yyyy HH:mm:ss")").getTime();
+
+                        var x_@item.ItemID = setInterval(function () {
+
+                            var now_@item.ItemID@item.ItemName = new Date().getTime();
+                            var distance_@item.ItemID = countDownDate_@item.ItemID@item.ItemName - now_@item.ItemID@item.ItemName;
+
+                            var hours_@item.ItemID = Math.floor((distance_@item.ItemID % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            var minutes_@item.ItemID = Math.floor((distance_@item.ItemID % (1000 * 60 * 60)) / (1000 * 60));
+                            var seconds_@item.ItemID = Math.floor((distance_@item.ItemID % (1000 * 60)) / 1000);
+
+
+                            document.getElementById("count_@item.ItemName@item.ItemID").innerHTML = hours_@item.ItemID + "h " + minutes_@item.ItemID + "m " + seconds_@item.ItemID + "s ";
+
+                            if (distance_@item.ItemID < 0) {
+                                clearInterval(x_@item.ItemID);
+                                document.getElementById("div_@item.ItemName@item.ItemID").remove();
+                            }
+                        }, 1000);
+
+                        
+                    </script>
+                        </div>
+                    }
+
+                }
+
+            }
+
+    </div>
+</section>
+<script>
+    function Auction(txt) {
+        document.getElementById("price_" + txt).innerHTML = String(Number(document.getElementById("price_" + txt).textContent) + 100);
+        document.getElementById("Bider_" + txt).innerHTML = "@Session["Account"]";
+                            @*$.ajax({
+                                url: "@Url.Content("~/Home/Auction")",
+                                data: {
+                                    Bidder: @Session["Account"],
+                                    FinalPrice: Number(document.getElementById("price_@item.ItemID").textContent)
+                                },
+                                type: "POST",
+                                dataType: "json",
+                                success: function (msg) {
+                                if (msg.OperateResult == "Success") {
+                                    alert(msg.OperateData);
+                                    }
+                                }
+                            })*@
+    }
+</script>
+

@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/homeStyle.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/Responsive.css">
+    <link rel="stylesheet" href="~/Content/AboutUs.css">
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+</head>
+@{ 
+    if (TempData["msg"] != null)
+    {
+    <script>
+        alert("@TempData["msg"]");
+        </script>
+        }
+    }
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("OnlineMarketPlace", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("AboutUs", "AboutUs", "Home")</li>
+                    @{
+                        if (Session["Account"] != null)
+                        {
+                            <li>@Html.ActionLink("Logout", "Logout", "Home")</li>
+                            <li>@Html.ActionLink("User Info", "Info", "User")</li>
+                            if (Session["AccountType"].Equals("Buyer"))
+                            {
+                            <li>@Html.ActionLink("Cart", "Cart", "User")</li>
+                            }
+                            else
+                            {
+                            <li>@Html.ActionLink("Upload Product", "Upload", "User")</li>
+                            }
+                            <li>@Html.ActionLink("Auction", "Auction", "Home")</li>
+                            
+                            <li>@Html.ActionLink("ChatRoom", "ChatRoom", "User")</li>
+                            <li>@Html.ActionLink("My Product", "Myproduct", "User")</li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Login", "Login", "Home")</li>
+                            <li>@Html.ActionLink("Register", "Register", "Home")</li>
+
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - HybirdCloud</p>
+        </footer>
+    </div>
+    <script>
+    $(document).ready(function () {
+        setInterval(CheckIsForcedLogout, 5 * 1000);
+    });
+
+    function CheckIsForcedLogout() {
+        $.ajax({
+            url: "@Url.Content("~/Home/CheckIsForcedLogout")",
+            type: "POST",
+            dataType: "json",
+            success: function (msg) {
+                if (msg.OperateResult == "Success") {
+                    alert(msg.OperateData);
+                    window.location.href = "@Url.Action("Home")";
+                }
+            }
+        })
+        }
+
+
+    </script>
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
