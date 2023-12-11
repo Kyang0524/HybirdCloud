@@ -12,17 +12,10 @@ namespace HybirdCloud
     using System;
     using System.Collections.Generic;
     
-    public partial class ItemInfo
+    public partial class Cart
     {
+        public string Username { get; set; }
         public string ItemID { get; set; }
-        public string ItemName { get; set; }
-        public string ItemPrice { get; set; }
-        public string ItemUploader { get; set; }
-        public string Description { get; set; }
-        public string Categories { get; set; }
-        public string SalesMethod { get; set; }
-        public byte[] ItemImage { get; set; }
-        public System.DateTime ItemUploadTime { get; set; }
-        public string Expiredtime { get; set; }
+        public string CartID { get; set; }
     }
 }

@@ -26,8 +26,8 @@
                     <div class="col-sm-12 form-group"><strong>Price: $</strong> <input type="number" name="ItemPrice" required /></div>
                     <div class="col-sm-12 form-group"><strong>Description: </strong> <input type="text" name="Description" required /></div>
                     <div class="col-sm-12 form-group"><strong>Categories: </strong> <select name="Categories" required><option value="Dog">Dog</option><option value="BugCat">BugCat</option><option value="Shark">Shark</option></select></div>
-                    <div class="col-sm-12 form-group"><strong>Sales method: </strong> <select name="SalesMethod" required><option value="Normal">Normal</option><option value="Auction">Auction</option></select></div>
-
+                    <div class="col-sm-12 form-group"><strong>Sales method: </strong> <select name="SalesMethod" id="SalesMethod" required><option value="Normal">Normal</option><option value="Promotion">Promotion</option></select></div>
+                    <div class="col-sm-12 form-group" id="Expiredtime" style="display:none;"><strong>Set expired time: </strong> <input type="number" name="Expiredtime" /></div>
                 </div>
                 <center><button class="btn btn-default" type="submit">Submit</button></center>
             </form>
@@ -55,6 +55,14 @@
         imgavat.attr('src', '');
         inpfile.val('');
     }
+    $("#SalesMethod").change(function () {
+        if ($(this).val() == "Promotion") {
+            $("#Expiredtime").show();
+        } else {
+            $("#Expiredtime").hide();
+        }
+
+    });
 
 </script>
 

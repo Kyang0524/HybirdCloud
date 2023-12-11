@@ -82,13 +82,108 @@ namespace HybirdCloud.Controllers
 
         public ActionResult Cart()
         {
-            return View();
+            if (Session["Account"] != null)
+            {
+                Session["TotalPrice"] = 0;
+                var db = new HybridCloudEntities();
+                string username = Session["Account"].ToString();
+                List<Cart> carts = db.Cart.Where(x => x.Username.Equals(username)).ToList();
+                List<ItemInfo> items = new List<ItemInfo>();
+                foreach(Cart cart in carts)
+                {
+                    items.Add(db.ItemInfo.Find(cart.ItemID));  
+                }
+                foreach(ItemInfo item in items)
+                {
+                    Session["TotalPrice"] = Convert.ToInt64(Session["TotalPrice"]) + Convert.ToInt64(item.ItemPrice) ;
+                }
+                ViewBag.cart = items;
+                return View();
+            }
+            TempData["msg"] = "please login!";
+            return RedirectToAction("Login","Home");
+        }
+        [HttpPost]
+        public ActionResult DeleteItem(Cart cart)
+        {
+            var db = new HybridCloudEntities();
+            string user = Session["Account"].ToString();
+            List<Cart> item = db.Cart.Where(x => x.ItemID.Equals(cart.ItemID) && x.Username.Equals(user)).ToList();
+            foreach (Cart cartitem in item)
+            {
+                db.Cart.Remove(cartitem);
+            }
+            db.SaveChanges();
+            return RedirectToAction("Cart","User");
+        }
+        [HttpPost]
+        public ActionResult BuyOnCart()
+        {
+            if (Session["Account"] != null)
+            {
+                var db = new HybridCloudEntities();
+                string username = Session["Account"].ToString();
+                UserInfo userInfo = db.UserInfo.Find(username);
+
+                List<Cart> carts = db.Cart.Where(x => x.Username.Equals(username)).ToList();
+                List<ItemInfo> items = new List<ItemInfo>();
+                if (Convert.ToInt64(userInfo.Wallet) < Convert.ToInt64(Session["TotalPrice"])) {
+                    TempData["msg"] = "not enough money!";
+                    return RedirectToAction("Index", "Home");
+                }
+                foreach (Cart cart in carts)
+                {
+                    items.Add(db.ItemInfo.Find(cart.ItemID));
+                }
+
+
+                foreach (ItemInfo item in items)
+                {
+                    string sellername = item.ItemUploader;
+                    UserInfo sellerinfo = db.UserInfo.Find(sellername);
+                    sellerinfo.Wallet = (Convert.ToInt64(sellerinfo.Wallet) + Convert.ToInt64(item.ItemPrice)).ToString();
+                    db.Entry(sellerinfo).State = EntityState.Modified;
+                    db.SaveChanges();
+                    Shopping shopping = new Shopping();
+                    Random generator = new Random();
+                    string d1 = generator.Next(0, 1000000).ToString("D6");
+
+                    shopping.ID = d1 + generator.Next(0, 1000000).ToString("D6");
+                    shopping.Buyer = Session["Account"].ToString();
+                    shopping.ItemID = item.ItemID;
+                    db.Shopping.Add(shopping);
+
+                    string user = Session["Account"].ToString();
+                    List<Cart> item_ = db.Cart.Where(x => x.ItemID.Equals(item.ItemID) && x.Username.Equals(username)).ToList();
+                    foreach (Cart cartitem in item_)
+                    {
+                        db.Cart.Remove(cartitem);
+                    }
+
+                }
+
+                userInfo.Wallet = (Convert.ToInt64(userInfo.Wallet) - Convert.ToInt64(Session["TotalPrice"])).ToString();
+                Session["TotalPrice"] = 0;
+                db.Entry(userInfo).State = EntityState.Modified;
+                
+                db.SaveChanges();
+                Session["Wallet"] = userInfo.Wallet;
+
+                List<Cart> carts_ = db.Cart.Where(x => x.Username.Equals(username)).ToList();
+                List<ItemInfo> items_ = new List<ItemInfo>();
+                foreach (Cart cart in carts_)
+                {
+                    items.Add(db.ItemInfo.Find(cart.ItemID));
+                }
+                ViewBag.cart = items_;
+
+                return View("Cart");
+            }
+            TempData["msg"] = "please login!";
+            return RedirectToAction("Login", "Home");
+            
         }
 
-        public ActionResult ChatRoom()
-        {
-            return View();
-        }
 
         public ActionResult Upload()
         {
@@ -100,7 +195,7 @@ namespace HybirdCloud.Controllers
             if (Session["AccountType"].Equals("Buyer"))
             {
                 TempData["msg"] = "You are not Seller account";
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index", "Home");
             }
             return View();
         }
@@ -120,6 +215,7 @@ namespace HybirdCloud.Controllers
             itemInfo.Categories = productModel.Categories;
             itemInfo.SalesMethod = productModel.SalesMethod;
             itemInfo.ItemUploadTime = DateTime.UtcNow;
+            itemInfo.Expiredtime = productModel.Expiredtime.ToString();
 
             if (productModel.ItemImage != null) {
                 byte[] fileBytes;

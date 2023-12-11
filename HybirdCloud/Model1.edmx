@@ -4,7 +4,15 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="HybridCloudModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="HybridCloudModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="CartID" />
+          </Key>
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ItemID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CartID" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="ItemInfo">
           <Key>
             <PropertyRef Name="ItemID" />
@@ -18,6 +26,7 @@
           <Property Name="SalesMethod" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="ItemImage" Type="varbinary(max)" Nullable="false" />
           <Property Name="ItemUploadTime" Type="datetime" Nullable="false" />
+          <Property Name="Expiredtime" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Shopping">
           <Key>
@@ -41,29 +50,15 @@
           <Property Name="Image" Type="varbinary(max)" />
         </EntityType>
         <EntityContainer Name="HybridCloudModelStoreContainer">
+          <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ItemInfo" EntityType="Self.ItemInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Shopping" EntityType="Self.Shopping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HybridCloudModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="ItemInfo">
-          <Key>
-            <PropertyRef Name="ItemID" />
-          </Key>
-          <Property Name="ItemID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ItemName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ItemPrice" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ItemUploader" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Categories" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="SalesMethod" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ItemImage" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
-          <Property Name="ItemUploadTime" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
         <EntityType Name="Shopping">
           <Key>
             <PropertyRef Name="ID" />
@@ -86,31 +81,40 @@
           <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityContainer Name="HybridCloudEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="ItemInfo" EntityType="Self.ItemInfo" />
           <EntitySet Name="Shopping" EntityType="Self.Shopping" />
           <EntitySet Name="UserInfo" EntityType="Self.UserInfo" />
+          <EntitySet Name="ItemInfo" EntityType="HybridCloudModel.ItemInfo" />
+          <EntitySet Name="Cart" EntityType="HybridCloudModel.Cart" />
         </EntityContainer>
+        <EntityType Name="ItemInfo">
+          <Key>
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="ItemID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ItemName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ItemPrice" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ItemUploader" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Categories" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SalesMethod" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ItemImage" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="ItemUploadTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Expiredtime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="CartID" />
+          </Key>
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ItemID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CartID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="HybridCloudModelStoreContainer" CdmEntityContainer="HybridCloudEntities">
-          <EntitySetMapping Name="ItemInfo">
-            <EntityTypeMapping TypeName="HybridCloudModel.ItemInfo">
-              <MappingFragment StoreEntitySet="ItemInfo">
-                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
-                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
-                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
-                <ScalarProperty Name="ItemUploader" ColumnName="ItemUploader" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Categories" ColumnName="Categories" />
-                <ScalarProperty Name="SalesMethod" ColumnName="SalesMethod" />
-                <ScalarProperty Name="ItemImage" ColumnName="ItemImage" />
-                <ScalarProperty Name="ItemUploadTime" ColumnName="ItemUploadTime" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Shopping">
             <EntityTypeMapping TypeName="HybridCloudModel.Shopping">
               <MappingFragment StoreEntitySet="Shopping">
@@ -131,6 +135,31 @@
                 <ScalarProperty Name="Gender" ColumnName="Gender" />
                 <ScalarProperty Name="Wallet" ColumnName="Wallet" />
                 <ScalarProperty Name="Image" ColumnName="Image" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemInfo">
+            <EntityTypeMapping TypeName="HybridCloudModel.ItemInfo">
+              <MappingFragment StoreEntitySet="ItemInfo">
+                <ScalarProperty Name="Expiredtime" ColumnName="Expiredtime" />
+                <ScalarProperty Name="ItemUploadTime" ColumnName="ItemUploadTime" />
+                <ScalarProperty Name="ItemImage" ColumnName="ItemImage" />
+                <ScalarProperty Name="SalesMethod" ColumnName="SalesMethod" />
+                <ScalarProperty Name="Categories" ColumnName="Categories" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ItemUploader" ColumnName="ItemUploader" />
+                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cart">
+            <EntityTypeMapping TypeName="HybridCloudModel.Cart">
+              <MappingFragment StoreEntitySet="Cart">
+                <ScalarProperty Name="CartID" ColumnName="CartID" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

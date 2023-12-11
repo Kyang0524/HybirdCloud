@@ -8,7 +8,7 @@
     <div class="container">
         <div class="heading_container">
             <h2>
-                Auction
+                Promotion
             </h2>
         </div>
         @{
@@ -35,12 +35,12 @@
                             <div class="col-sm-6"><strong>Item Name: </strong> <var>@item.ItemName</var></div>
                             <div class="col-sm-6"><strong>Price: </strong> <var id="price_@item.ItemID">@item.ItemPrice</var></div>
                             <div class="col-sm-6"><strong>Seller: </strong> <var>@item.ItemUploader</var></div>
-                            <div class="col-sm-6"><strong>Bidder: </strong> <var id="Bider_@item.ItemID"></var></div>
                         </div>
                     </div>
                     @if (!Session["Account"].Equals(item.ItemUploader))
                     {
-                        <center><button type="submit" id="Bid_@item.ItemID@item.ItemUploader" onclick="Auction(@item.ItemID)">Bid(+100)</button></center>
+                        <center><form method="post" action="~/Home/Shop"><input value="@item.ItemName" name="ItemName" hidden /><input value="@item.ItemPrice" name="ItemPrice" hidden /><input value="@item.ItemUploader" name="Ownership" hidden /><input value="@item.ItemID" name="ItemID" hidden /><button type="submit">Buy</button></form></center>
+                       
 
                     }
 
@@ -76,24 +76,5 @@
 
     </div>
 </section>
-<script>
-    function Auction(txt) {
-        document.getElementById("price_" + txt).innerHTML = String(Number(document.getElementById("price_" + txt).textContent) + 100);
-        document.getElementById("Bider_" + txt).innerHTML = "@Session["Account"]";
-                            @*$.ajax({
-                                url: "@Url.Content("~/Home/Auction")",
-                                data: {
-                                    Bidder: @Session["Account"],
-                                    FinalPrice: Number(document.getElementById("price_@item.ItemID").textContent)
-                                },
-                                type: "POST",
-                                dataType: "json",
-                                success: function (msg) {
-                                if (msg.OperateResult == "Success") {
-                                    alert(msg.OperateData);
-                                    }
-                                }
-                            })*@
-    }
-</script>
+
 

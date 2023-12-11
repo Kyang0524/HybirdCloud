@@ -25,8 +25,9 @@ namespace HybirdCloud
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<ItemInfo> ItemInfo { get; set; }
         public virtual DbSet<Shopping> Shopping { get; set; }
         public virtual DbSet<UserInfo> UserInfo { get; set; }
+        public virtual DbSet<ItemInfo> ItemInfo { get; set; }
+        public virtual DbSet<Cart> Cart { get; set; }
     }
 }

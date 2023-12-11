@@ -1,7 +1,49 @@
 ﻿
 @{
     ViewBag.Title = "Cart";
+    List<ItemInfo> items = ViewBag.cart;
 }
 
-<h2>Cart</h2>
+<section class="shop_section layout_padding">
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Cart
+            </h2>
+        </div>
+
+        @foreach (ItemInfo item in items)
+        {
+            <form method="post" action="~/User/DeleteItem" >
+            <div class="box">
+                <input name="ItemID" value="@item.ItemID" hidden readonly />
+                <button type="submit">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAgElEQVR4nO2VwQnAIAxF3zg92B2K+5/aQ0coZAmLkIOIFawKLeSDIEn4iclXwdCIMGg9whKE1hadwAZcBZ8AHth7ZuDV7pQwJY82NOZ1AgFW9S16kpKtS0WSVOuyvYySqSRV1yr/ZgKZ2SKZPWQ/W6aHEkjlosUYe+z4z39gIMcNGjoWXoEhKL0AAAAASUVORK5CYII=">
+                </button>
+                <center>
+                    <div class="img-box" style="width:200px;height:200px;">
+                        <img src='data:image;base64,@Convert.ToBase64String(item.ItemImage)' alt="個人頭像">
+                    </div>
+                </center>
+                <div class="row" style="font-size:20px;">
+                    <div class="col-sm-6"><strong>Item Name: </strong> <var>@item.ItemName</var></div>
+                    <div class="col-sm-6"><strong>Price: </strong> <var>$@item.ItemPrice</var></div>
+                    <div class="col-sm-6"><strong>Seller: </strong> <var>@item.ItemUploader</var></div>
+                </div>
+            </div>
+                </form>
+
+        }
+        @if (Session["TotalPrice"].Equals(0))
+        {
+    <center><div class="col-sm-6"><strong>Your cart empty!</strong> </div></center>
+        }
+        else
+        {
+            <center><div class="col-sm-6"><strong>Total Price: </strong> <var>$@Session["TotalPrice"]</var></div></center>
+            <form method="post" action="~/User/BuyOnCart"><button>Buy All</button></form>
+        }
+
+    </div>
+</section>
 

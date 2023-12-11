@@ -14,6 +14,7 @@ namespace HybirdCloud.Models
         public string Description { get; set; }
         public string Categories { get; set; }
         public string SalesMethod { get; set; }
+        public double Expiredtime { get; set; }
         public HttpPostedFileBase ItemImage { get; set; }
         public DateTime ItemUploadTime { get; set; }
     }

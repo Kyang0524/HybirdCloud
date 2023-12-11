@@ -27,7 +27,7 @@
                 </div>
             </div>              
             if (!Session["Account"].Equals(item.ItemUploader)) {
-            <button>Chat with sheller</button><button>Add to cart</button><form method="post" action="~/Home/Shop"><input value="@item.ItemName" name="ItemName" hidden /><input value="@item.ItemPrice" name="ItemPrice" hidden /><input value="@item.ItemUploader" name="Ownership" hidden /><input value="@item.ItemID" name="ItemID" hidden /><button type="submit">Buy</button></form>
+            <form method="post" action="~/Home/AddToCart"><input name="ItemID" value="@item.ItemID" hidden readonly /><button>Add to cart</button></form><form method="post" action="~/Home/Shop"><input value="@item.ItemName" name="ItemName" hidden /><input value="@item.ItemPrice" name="ItemPrice" hidden /><input value="@item.ItemUploader" name="Ownership" hidden /><input value="@item.ItemID" name="ItemID" hidden /><button type="submit">Buy</button></form>
             } 
         }
 

@@ -215,14 +215,14 @@ namespace HybirdCloud.Controllers
             if (Session["Account"] != null)
             {
                 var db = new HybridCloudEntities();
-                List<ItemInfo> itemInfosList = db.ItemInfo.Where(I => I.SalesMethod.Equals("Auction")).OrderBy(x => x.ItemUploadTime).ToList();
+                List<ItemInfo> itemInfosList = db.ItemInfo.Where(I => I.SalesMethod.Equals("Promotion")).OrderBy(x => x.ItemUploadTime).ToList();
                 List<ItemInfo> items = new List<ItemInfo>();
 
                 //&& I.ItemUploadTime.AddMinutes(5.0) <= DateTime.UtcNow
                 foreach (ItemInfo item in itemInfosList) {
-                    if (item.ItemUploadTime.AddMinutes(5.0) > DateTime.UtcNow)
+                    if (item.ItemUploadTime.AddMinutes(Double.Parse(item.Expiredtime)) > DateTime.UtcNow)
                     {
-                        item.ItemUploadTime = item.ItemUploadTime.AddMinutes(5.0).AddHours(8.0);
+                        item.ItemUploadTime = item.ItemUploadTime.AddMinutes(Double.Parse(item.Expiredtime)).AddHours(8.0);
                         items.Add(item);
                     }
                 }
@@ -232,6 +232,42 @@ namespace HybirdCloud.Controllers
             }
             TempData["msg"] = "Please Login first!";
             return RedirectToAction("Login", "Home");
+        }
+
+        [HttpPost]
+        public ActionResult AddToCart(CartModel cartModel)
+        {
+            
+            if (Session["Account"] != null)
+            {
+                var db = new HybridCloudEntities();
+                string user = Session["Account"].ToString();
+                List<Cart> cart1 = db.Cart.Where(x => x.ItemID.Equals(cartModel.ItemID) && x.Username.Equals(user)).ToList();
+                if (cart1.Count() == 0 )
+                {
+                    var cart = new Cart();
+                    cart.Username = Session["Account"].ToString();
+                    cart.ItemID = cartModel.ItemID;
+
+                    Random generator = new Random();
+
+                    string id1 = generator.Next(0, 1000000).ToString("D6");
+                    string id2 = id1 + generator.Next(0, 1000000).ToString("D6");
+
+                    cart.CartID = id2;
+                    db.Cart.Add(cart);
+                    db.SaveChanges();
+
+                    TempData["msg"] = "Add to cart successful";
+
+                    
+                    return RedirectToAction("Cart", "User");
+                }
+                
+                TempData["msg"] = "already add to cart";
+                return RedirectToAction("Cart","User");
+            }
+            return View("Login");
         }
 
 
