@@ -119,6 +119,7 @@ namespace HybirdCloud.Controllers
         [HttpPost]
         public ActionResult BuyOnCart()
         {
+            Random generator = new Random();
             if (Session["Account"] != null)
             {
                 var db = new HybridCloudEntities();
@@ -145,14 +146,13 @@ namespace HybirdCloud.Controllers
                     db.Entry(sellerinfo).State = EntityState.Modified;
                     db.SaveChanges();
                     Shopping shopping = new Shopping();
-                    Random generator = new Random();
                     string d1 = generator.Next(0, 1000000).ToString("D6");
 
                     shopping.ID = d1 + generator.Next(0, 1000000).ToString("D6");
                     shopping.Buyer = Session["Account"].ToString();
                     shopping.ItemID = item.ItemID;
                     db.Shopping.Add(shopping);
-
+                    db.SaveChanges();
                     string user = Session["Account"].ToString();
                     List<Cart> item_ = db.Cart.Where(x => x.ItemID.Equals(item.ItemID) && x.Username.Equals(username)).ToList();
                     foreach (Cart cartitem in item_)
