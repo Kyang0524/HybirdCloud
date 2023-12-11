@@ -40,8 +40,8 @@
                     @{
                         if (Session["Account"] != null)
                         {
-                            <li>@Html.ActionLink("Logout", "Logout", "Home")</li>
-                            <li>@Html.ActionLink("User Info", "Info", "User")</li>
+                            
+                            
                             if (Session["AccountType"].Equals("Buyer"))
                             {
                             <li>@Html.ActionLink("Cart", "Cart", "User")</li>
@@ -53,6 +53,8 @@
                             <li>@Html.ActionLink("Promotion", "Auction", "Home")</li>
                             
                             <li>@Html.ActionLink("My Product", "Myproduct", "User")</li>
+                            <li>@Html.ActionLink("User Info", "Info", "User")</li>
+                            <li>@Html.ActionLink("Logout", "Logout", "Home")</li>
                         }
                         else
                         {
