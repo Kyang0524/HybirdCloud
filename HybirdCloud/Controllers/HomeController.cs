@@ -24,9 +24,16 @@ namespace HybirdCloud.Controllers
         public ActionResult Index()
         {
             var db = new HybridCloudEntities();
-
-            List<ItemInfo> itemInfos = db.ItemInfo.Where(I => I.SalesMethod.Equals("Normal")).ToList();
-            ViewBag.AllItemList = itemInfos;
+            List<ItemInfo> itemInfos_ = new List<ItemInfo>();
+            List<ItemInfo> itemInfos = db.Set<ItemInfo>().ToList();
+            foreach (ItemInfo item in itemInfos)
+            {
+                if (item.SalesMethod.Equals("Normal"))
+                {
+                    itemInfos_.Add(item);
+                }
+            }
+            ViewBag.AllItemList = itemInfos_;
             return View();
         }
         [HttpGet]

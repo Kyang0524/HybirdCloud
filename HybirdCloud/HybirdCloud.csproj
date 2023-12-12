@@ -195,7 +195,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="image\default.jpg" />
+    <Content Include="image\bugcat.png" />
+    <Content Include="image\dog.jpeg" />
+    <Content Include="image\other.png" />
     <Content Include="image\p1.png" />
     <Content Include="image\p2.png" />
     <Content Include="image\p3.png" />
@@ -207,6 +209,7 @@
     <Content Include="image\pic1.jpg" />
     <Content Include="image\pic2.png" />
     <Content Include="image\pic3.jpg" />
+    <Content Include="image\shark.png" />
     <Content Include="Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
