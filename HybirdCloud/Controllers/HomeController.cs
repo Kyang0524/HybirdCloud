@@ -125,6 +125,10 @@ namespace HybirdCloud.Controllers
 
             var db = new HybridCloudEntities();
             UserInfo user = db.UserInfo.Find(userViewModel.Username);
+            if(user == null) {
+                TempData["msg"] = "No have this account!";
+                return View();
+            }
             if (userViewModel.Password.Equals(user.Password) && userViewModel.Password != null && userViewModel.ValidateCode.Equals(Session["gif"].ToString()))
             {
 
@@ -201,7 +205,7 @@ namespace HybirdCloud.Controllers
             users.PhoneNumber = registerViewModel.PhoneNumber;
             users.AccountType = registerViewModel.AccountType;
             users.Gender = registerViewModel.Gender;
-            users.Wallet = "99999";
+            users.Wallet = "5000";
 
             byte[] fileBytes;
             using (var stream = registerViewModel.Image.InputStream)

@@ -176,7 +176,7 @@ namespace HybirdCloud.Controllers
                     items.Add(db.ItemInfo.Find(cart.ItemID));
                 }
                 ViewBag.cart = items_;
-
+                TempData["msg"] = "Purchase done,check [my product].";
                 return View("Cart");
             }
             TempData["msg"] = "please login!";

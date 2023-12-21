@@ -197,6 +197,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="image\bugcat.png" />
     <Content Include="image\dog.jpeg" />
+    <Content Include="image\Logo.png" />
     <Content Include="image\other.png" />
     <Content Include="image\p1.png" />
     <Content Include="image\p2.png" />

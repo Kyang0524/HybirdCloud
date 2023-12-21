@@ -14,21 +14,22 @@
 
         <div class="box">
             <form method="post" action="~/User/EditInfo" enctype="multipart/form-data">
-            <center>
-                <div class="img-box" style="width:200px;height:200px;">
-                    <label><input type="file" id="inpfile" name="Image" style="display: none;" accept=".jpg,.png"><img id="avat" class="avat" src='data:image;base64,@Session["Image"]' alt="個人頭像"></label>
+                <center>
+                    <div class="img-box" style="width:200px;height:200px;">
+                        <label><input type="file" id="inpfile" name="Image" style="display: none;" accept=".jpg,.png"><img id="avat" class="avat" src='data:image;base64,@Session["Image"]' alt="個人頭像"></label>
+                    </div>
+                </center>
+                <div class="row" style="font-size:20px;">
+                    <div class="col-sm-6"><strong>UserName: </strong> <var>@Session["Account"]</var></div>
+                    <div class="col-sm-6"><strong>Email: </strong> <input type="email" name="Email" value="@Session["Email"]" /></div>
+                    <div class="col-sm-6"><strong>Contact Number: </strong> <input type="text" name="PhoneNumber" value="@Session["PhoneNumber"]" /></div>
+                    <div class="col-sm-6"><strong>Gender: </strong> <var>@Session["Gender"]</var></div>
+                    <div class="col-sm-6"><strong>Account Type: </strong> <var>@Session["AccountType"]</var></div>
+                    <div class="col-sm-6"><strong>Wallet: </strong> <var>$@Session["Wallet"]</var></div>
                 </div>
-            </center>
-            <div class="row" style="font-size:20px;">
-                <div class="col-sm-6"><strong>UserName: </strong> <var>@Session["Account"]</var></div>
-                <div class="col-sm-6"><strong>Email: </strong> <input type="email" name="Email" value="@Session["Email"]"/></div>
-                <div class="col-sm-6"><strong>Contact Number: </strong> <input type="text" name="PhoneNumber"value="@Session["PhoneNumber"]"/></div>
-                <div class="col-sm-6"><strong>Gender: </strong> <var>@Session["Gender"]</var></div>
-                <div class="col-sm-6"><strong>Account Type: </strong> <var>@Session["AccountType"]</var></div>
-                <div class="col-sm-6"><strong>Wallet: </strong> <var>$@Session["Wallet"]</var></div>
-            </div>
-            <center><button class="btn btn-default" type="submit">Submit</button> <button class="btn btn-default" onclick="history.back()">Go Back</button></center>
-                </form>
+                <center><button class="btn btn-default" type="submit">Submit</button></center>
+            </form> <center><button class="btn btn-default" onclick="history.back()" style="margin-top:10px;">Go Back</button></center>
+
         </div>
 
 
